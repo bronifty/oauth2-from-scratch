@@ -1,0 +1,17 @@
+{
+	"name": "oauth2-handbook",
+	"devDependencies": {
+		"@biomejs/biome": "^2.0.5",
+		"@types/node": "^22.15.29",
+		"knip": "^5.61.2",
+		"typescript": "^5.8.3"
+	},
+	"scripts": {
+		"check:quality": "biome check .",
+		"check:quality:fix": "biome check . --write --unsafe",
+		"check:unused": "knip"
+	},
+	"trustedDependencies": ["@biomejs/biome"],
+	"type": "module",
+	"workspaces": ["api", "e2e", "idp", "web"]
+}

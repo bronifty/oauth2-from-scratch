@@ -11,9 +11,9 @@ echo ""
 
 # Check if required files exist
 required_files=(
-    "authorizationServer.js"
+    "server.js"
     "client.js" 
-    "protectedResource.js"
+    "api.js"
 )
 
 for file in "${required_files[@]}"; do
@@ -29,9 +29,9 @@ echo ""
 
 # Set debug environment variable and run servers concurrently
 DEBUG=express:* bunx concurrently \
-    "bun --watch authorizationServer.js" \
+    "bun --watch server.js" \
     "bun --watch client.js" \
-    "bun --watch protectedResource.js" \
-    --names "AUTH,CLIENT,RESOURCE" \
+    "bun --watch api.js" \
+    --names "SERVER,CLIENT,API" \
     --prefix-colors "cyan,magenta,yellow" \
     --kill-others-on-fail

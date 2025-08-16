@@ -68,7 +68,7 @@ status:
 	@echo ""
 	@echo "=== Process Status ==="
 	@echo "OAuth servers:"
-	@pgrep -f "authorizationServer.js\|client.js\|protectedResource.js" > /dev/null && echo "✅ OAuth servers running" || echo "❌ OAuth servers not running"
+	@pgrep -f "server.js\|client.js\|api.js" > /dev/null && echo "✅ OAuth servers running" || echo "❌ OAuth servers not running"
 	@echo "SPA dev server:"
 	@pgrep -f "react-router dev" > /dev/null && echo "✅ SPA dev server running" || echo "❌ SPA dev server not running"
 	@echo ""
@@ -113,7 +113,7 @@ start: all-dev
 stop:
 	@echo "🛑 Stopping all services..."
 	@echo "Stopping OAuth servers..."
-	@pkill -f "authorizationServer.js\|client.js\|protectedResource.js" 2>/dev/null || true
+	@pkill -f "server.js\|client.js\|api.js" 2>/dev/null || true
 	@echo "Stopping SPA dev server..."
 	@pkill -f "react-router dev" 2>/dev/null || true
 	@echo "Stopping nix proxy..."

@@ -1,0 +1,28 @@
+{
+	"name": "api",
+	"module": "app/index.ts",
+	"main": "app/index.ts",
+	"type": "module",
+	"scripts": {
+		"start": "bun run app/index.ts",
+		"dev": "bun run app/index.ts --watch --hot",
+		"db:reset": "rm db/db.sqlite",
+		"db:migrate": "bun run ./scripts/db-migrate.ts",
+		"db:seed": "bun run ./scripts/db-seed.ts",
+		"db:setup": "bun db:migrate && bun db:seed",
+		"typecheck": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@total-typescript/tsconfig": "^1.0.4",
+		"@types/bun": "^1.2.16",
+		"@types/sort-by": "^1.2.3",
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@edgefirst-dev/data": "^0.0.4",
+		"@edgefirst-dev/jwt": "^1.3.0",
+		"jose": "^6.0.11",
+		"sort-by": "^1.2.0",
+		"zod": "^3.25.67"
+	}
+}

@@ -1,0 +1,23 @@
+# OS Files
+
+.DS_Store
+
+# Dependencies
+node_modules
+
+# React Router
+.react-router/
+build/
+
+# Application files
+logs
+coverage
+.env
+
+# Database files
+keys/
+db.sqlite
+
+# E2E Files
+playwright-report/
+test-results/

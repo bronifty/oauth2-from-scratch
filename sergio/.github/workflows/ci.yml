@@ -1,0 +1,57 @@
+name: CI
+
+# We run CI on every push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+
+# Automatically cancel running workflows when there's a new one
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun test
+
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun check:quality
+
+  e2e:
+    name: End-to-End Tests
+    runs-on: ubuntu-latest
+    env:
+      SESSION_SECRET: secret
+      ISSUER: idp.addressbook.com
+      AUDIENCE: api.addressbook.com
+      CLIENT_ID: 56f0fee7-a73e-41f5-9a75-310e5bb340ee
+      CLIENT_SECRET: d4023cc0-4d9f-4df2-9ed7-e4762438f9a9
+      RESOURCE_HOST: http://localhost:4000
+      ISSUER_HOST: http://localhost:4001
+      GH_CLIENT_ID: ${{ secrets.GH_CLIENT_ID }}
+      GH_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps
+      - run: |
+          make start &
+          bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/healthcheck)" != "200" && SECONDS -lt 240 ]]; do sleep 5; done'
+      - run: make e2e

@@ -1,0 +1,299 @@
+@import "tailwindcss";
+
+html {
+	box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+body {
+	@apply font-sans antialiased flex h-full w-full;
+}
+
+code {
+	@apply font-mono;
+}
+
+html,
+body {
+	@apply h-full m-0 leading-6 text-[#121212];
+}
+
+textarea,
+input,
+button {
+	font-family: inherit;
+	@apply text-base border-none rounded-lg p-2 shadow-sm bg-white leading-6 m-0;
+}
+
+button {
+	@apply text-[#3992ff] font-medium;
+}
+
+textarea:hover,
+input:hover,
+button:hover {
+	@apply shadow-md;
+}
+
+button:active {
+	@apply shadow-md active:translate-y-px;
+}
+
+#contact {
+	@apply max-w-2xl flex;
+}
+
+#contact h1 {
+	@apply flex items-start gap-4 text-4xl font-bold m-0 leading-[1.2];
+}
+
+#contact h1 + p {
+	@apply m-0;
+}
+
+#contact h1 + p + p {
+	@apply whitespace-pre-wrap;
+}
+
+#contact h1:focus {
+	@apply outline-none text-blue-600;
+}
+
+#contact h1 form {
+	@apply flex items-center mt-1;
+}
+
+#contact h1 form button {
+	@apply shadow-none text-2xl font-normal p-0;
+}
+
+#contact h1 form button[value="true"] {
+	@apply text-gray-400;
+}
+
+#contact h1 form button[value="true"]:hover,
+#contact h1 form button[value="false"] {
+	@apply text-yellow-500;
+}
+
+#contact a[href*="twitter"] {
+	@apply flex text-2xl text-[#3992ff] no-underline;
+}
+
+#contact a[href*="twitter"]:hover {
+	@apply underline;
+}
+
+#contact img {
+	@apply w-48 h-48 bg-gray-400 mr-8 rounded-2xl object-cover;
+}
+
+#contact h1 ~ div {
+	@apply flex gap-2 my-4;
+}
+
+form[action$="destroy"] button {
+	@apply text-red-500;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+#sidebar {
+	@apply w-88 bg-gray-100 border-r border-gray-300 flex flex-col;
+}
+
+#sidebar > * {
+	@apply px-8;
+}
+
+#sidebar aside {
+	@apply flex items-center px-8 py-4 border-b border-gray-300 order-1 justify-between;
+}
+
+#sidebar aside h1 {
+	@apply text-base font-medium m-0 leading-none;
+}
+
+#sidebar aside h1 a {
+	@apply text-[#3992ff] no-underline;
+}
+
+#sidebar aside h1 a:hover {
+	@apply underline;
+}
+
+#sidebar aside button {
+	@apply text-red-500;
+}
+
+#sidebar > div {
+	@apply flex items-center gap-2 py-4 border-b border-gray-300;
+}
+
+#sidebar > div form {
+	@apply relative;
+}
+
+#sidebar > div form input[type="search"] {
+	@apply w-full px-8 bg-no-repeat bg-left bg-[calc(0.625rem+0.75rem)] bg-contain relative;
+}
+
+#sidebar > div form input[type="search"].loading {
+	@apply bg-none;
+}
+
+#search-spinner {
+	@apply w-4 h-4 absolute left-2 top-3 bg-no-repeat animate-spin;
+}
+
+#sidebar nav {
+	@apply flex-1 overflow-auto pt-4;
+}
+
+#sidebar nav a {
+	@apply flex items-center justify-between overflow-hidden whitespace-pre p-2 rounded-lg text-inherit no-underline gap-4 transition-colors duration-100;
+}
+
+#sidebar nav a:hover {
+	@apply bg-gray-300;
+}
+
+#sidebar nav a.active {
+	@apply bg-blue-600 text-white;
+}
+
+#sidebar nav a.pending {
+	@apply animate-pulse;
+}
+
+#sidebar nav a.deleting {
+	@apply bg-black/10;
+}
+
+#sidebar nav a span {
+	@apply float-right text-yellow-500;
+}
+
+#sidebar nav a.active span {
+	@apply text-inherit;
+}
+
+i {
+	@apply text-gray-500;
+}
+
+#sidebar nav .active i {
+	@apply text-inherit;
+}
+
+#sidebar ul {
+	@apply p-0 m-0 list-none;
+}
+
+#sidebar li {
+	@apply my-1;
+}
+
+#detail {
+	@apply flex-1 p-8 w-full;
+}
+
+#detail.loading {
+	@apply opacity-25 transition-opacity duration-200 delay-200;
+}
+
+#error-page {
+	@apply flex flex-col items-center justify-center w-full;
+}
+
+#about {
+	@apply flex-1 p-8 w-full;
+}
+
+#loading-splash {
+	@apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center;
+}
+
+#loading-splash-spinner {
+	@apply w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin mb-4;
+}
+
+#index-page {
+	@apply my-8 text-center text-gray-500;
+}
+
+#index-page a {
+	@apply text-inherit;
+}
+
+#index-page a:hover {
+	@apply text-[#121212];
+}
+
+#index-page:before {
+	@apply block mb-2;
+	content: url("data:image/svg+xml,%3Csvg width='540' height='87' viewBox='0 0 1080 174' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E");
+}
+
+#contact-form {
+	@apply flex max-w-2xl flex-col gap-4;
+}
+
+#contact-form > p:first-child {
+	@apply m-0 p-0;
+}
+
+#contact-form > p:first-child > :nth-child(2) {
+	@apply mr-4;
+}
+
+#contact-form > p:first-child,
+#contact-form label {
+	@apply flex;
+}
+
+#contact-form p:first-child span,
+#contact-form label span {
+	@apply w-32;
+}
+
+#contact-form p:first-child input,
+#contact-form label input,
+#contact-form label textarea {
+	@apply flex-grow;
+}
+
+#contact-form-avatar {
+	@apply mr-8;
+}
+
+#contact-form-avatar img {
+	@apply w-48 h-48 bg-black/20 rounded-xl;
+}
+
+#contact-form-avatar input {
+	@apply w-full box-border;
+}
+
+#contact-form p:last-child {
+	@apply flex gap-2 ml-32;
+}
+
+#contact-form p:last-child button[type="button"] {
+	@apply text-inherit;
+}

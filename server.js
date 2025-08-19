@@ -3,7 +3,8 @@ var url = require("url");
 var bodyParser = require("body-parser");
 var randomstring = require("randomstring");
 var cons = require("consolidate");
-var nosql = require("nosql").load("database.nosql");
+var config = require("./config/server-config.json");
+var nosql = require("nosql").load(config.database.path);
 var querystring = require("querystring");
 var __ = require("underscore");
 __.string = require("underscore.string");
@@ -15,24 +16,11 @@ app.use(bodyParser.urlencoded({ extended: true })); // support form-encoded bodi
 
 app.engine("html", cons.underscore);
 app.set("view engine", "html");
-app.set("views", "files/authorizationServer");
+app.set("views", config.servers.server.viewPath);
 app.set("json spaces", 4);
 
-// authorization server information
-var authServer = {
-  authorizationEndpoint: "http://localhost:9001/authorize",
-  tokenEndpoint: "http://localhost:9001/token",
-};
-
 /*** global state ***/
-var clients = [
-  {
-    client_id: "oauth-client-1",
-    client_secret: "oauth-client-secret-1",
-    redirect_uris: ["http://localhost:9000/callback"],
-    scope: "foo bar",
-  },
-];
+// All configuration now comes directly from config file
 
 var codes = {};
 
@@ -41,7 +29,7 @@ var requests = {};
 
 var getClient = function (clientId) {
   let foundClient = null;
-  clients.forEach(function (client) {
+  config.clients.forEach(function (client) {
     if (client.client_id == clientId) {
       foundClient = client;
     }
@@ -50,7 +38,13 @@ var getClient = function (clientId) {
 };
 
 app.get("/", function (req, res) {
-  res.render("index", { clients: clients, authServer: authServer });
+  res.render("index", { 
+    clients: config.clients, 
+    authServer: {
+      authorizationEndpoint: config.servers.server.endpoints.authorization,
+      tokenEndpoint: config.servers.server.endpoints.token
+    }
+  });
 });
 
 app.get("/authorize", function (req, res) {
@@ -249,12 +243,12 @@ app.post("/token", function (req, res) {
   }
 });
 
-app.use("/", express.static("files/authorizationServer"));
+app.use("/", express.static(config.servers.server.viewPath));
 
 // clear the database on startup
 nosql.clear();
 
-var server = app.listen(9001, "localhost", function () {
+var server = app.listen(config.servers.server.port, config.servers.server.host, function () {
   var host = server.address().address;
   var port = server.address().port;
 

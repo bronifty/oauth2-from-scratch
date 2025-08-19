@@ -6,32 +6,16 @@ var querystring = require("querystring");
 var cons = require("consolidate");
 var randomstring = require("randomstring");
 var __ = require("underscore");
+var config = require("./config/server-config.json");
 __.string = require("underscore.string");
 
 var app = express();
 
 app.engine("html", cons.underscore);
 app.set("view engine", "html");
-app.set("views", "files/client");
+app.set("views", config.servers.client.viewPath);
 
-// authorization server information
-var authServer = {
-  authorizationEndpoint: "http://localhost:9001/authorize",
-  tokenEndpoint: "http://localhost:9001/token",
-};
-
-var protectedResource = "http://localhost:9002/resource";
-
-// client information
-
-/*
- * Add the client information in here
- */
-var client = {
-  client_id: "oauth-client-1",
-  client_secret: "oauth-client-secret-1",
-  redirect_uris: ["http://localhost:9000/callback"],
-};
+// All configuration now comes directly from config file
 
 var state = null;
 
@@ -51,10 +35,10 @@ app.get("/authorize", function (req, res) {
 
   state = randomstring.generate();
 
-  var authorizeUrl = buildUrl(authServer.authorizationEndpoint, {
+  var authorizeUrl = buildUrl(config.servers.server.endpoints.authorization, {
     response_type: "code",
-    client_id: client.client_id,
-    redirect_uri: client.redirect_uris[0],
+    client_id: config.clients[0].client_id,
+    redirect_uri: config.clients[0].redirect_uris[0],
     state,
   });
 
@@ -84,17 +68,17 @@ app.get("/callback", function (req, res) {
   var form_data = new URLSearchParams({
     grant_type: "authorization_code",
     code,
-    redirect_uri: client.redirect_uris[0],
+    redirect_uri: config.clients[0].redirect_uris[0],
   }).toString();
   var headers = {
     "Content-Type": "application/x-www-form-urlencoded",
     Authorization:
       "Basic " +
-      encodeClientCredentials(client.client_id, client.client_secret),
+      encodeClientCredentials(config.clients[0].client_id, config.clients[0].client_secret),
   };
 
   var tokRes = (async function () {
-    const response = await fetch(authServer.tokenEndpoint, {
+    const response = await fetch(config.servers.server.endpoints.token, {
       method: "POST",
       headers,
       body: form_data,
@@ -168,7 +152,7 @@ app.get("/fetch_resource", function (req, res) {
   };
 
   var tokRes = (async function () {
-    const response = await fetch(protectedResource, {
+    const response = await fetch(config.servers.api.endpoints.resource, {
       method: "post",
       headers,
     });
@@ -218,9 +202,9 @@ var encodeClientCredentials = function (clientId, clientSecret) {
   ).toString("base64");
 };
 
-app.use("/", express.static("files/client"));
+app.use("/", express.static(config.servers.client.viewPath));
 
-var server = app.listen(9000, "localhost", function () {
+var server = app.listen(config.servers.client.port, config.servers.client.host, function () {
   var host = server.address().address;
   var port = server.address().port;
   console.log("OAuth Client is listening at http://%s:%s", host, port);

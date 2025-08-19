@@ -11,9 +11,7 @@ web_install:
 	cd web && bun install
 
 install:
-	make api_install
-	make idp_install
-	make web_install
+	make api_install & make idp_install & make web_install
 
 stop:
 	lsof -ti:3000 | xargs kill -9 2>/dev/null; lsof -ti:4000 | xargs kill -9 2>/dev/null; lsof -ti:4001 | xargs kill -9 2>/dev/null; echo "Killed processes on ports 3000, 4000, and 4001"
